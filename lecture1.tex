@@ -2,6 +2,7 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
 
 %---enable russian----
 
@@ -12,7 +13,7 @@
 %---tikz----
 \usepackage{tikz}
 \usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
-
+\usepackage{pgfplots, subfigure}
 
 
 % MACROS 
@@ -156,39 +157,139 @@
                     c_4 &= d_2^2 - 24d_4 \\ \nonumber
                     \text{Для проверки: } 4d_8 &= d_2d_6 - d_4^2
                 \end{align}
+                Тогда \textbf{дискриминант} уравнения (2) определяется как 
+                \begin{equation}
+                    \Delta = -d_2^2d_8 - 8d_4^3-27d_6^2+9d_2d_4d_6,
+                \end{equation}
+                А j-инвариант эллиптической кривой $E$, $j(E)$, определяется как 
+                \begin{equation}
+                    j(E) = \frac{c_4^2}{\Delta}
+                \end{equation}
             \end{definition}
             
-        \begin{theorem}
-        	Утверждение теоремы
-        \end{theorem}
-        
-        \begin{proof}
-        	Доказательство
-        \end{proof}
-    
-    \section{Алгоритм}
-    
-        \begin{algorithm}[ph]
-        	\caption{Название алгоритма}
-        	\label{alg:AlgName}
-        	\textbf{Input:} Входные данные \\
-        	\textbf{Output:} Выходные данные
-        	
-        	\begin{algorithmic}[1]
-        		
-        		\State 
-        		\State{} \Return{} 
-        	\end{algorithmic}
-        
-        \end{algorithm}
-        
-    
-    \section{Анализ}
-        \subsection{Blah blah blah}
-        Текст лекции
-        
-        \subsubsection{Blah blah blah}
-        Текст лекции $\bigO$
-        
+            \begin{theorem}[Sil, Thm. 1.4]
+                Кривая, заданная уравнением Вейерштрасса, может быть классифицирована как:
+                \begin{enumerate}[itemsep=0pt, topsep=0pt, partopsep=0pt]
+                    \item Несингулярная $\iff \Delta \neq 0$ ($\implies$ задаёт эллиптическую кривую) 
+                    \item Кривая, обладающая узлом (node) $\iff \Delta = 0, c_4 \neq 0$ 
+                    \item Кривая, обладающая точкой перегиба (cusp) $\iff \Delta = c_4 = 0$
+                \end{enumerate}
+            \end{theorem}
+            % 
+            \begin{figure}[h!]
+                \centering
+                \subfigure[$\Delta < 0$]{
+                   \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-5,
+                            xmax=5,
+                            ymin=-7,
+                            ymax=7,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=-2.1038:3,
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3-3*x+3)}
+                                node[right] {$y^2=x^3-3x+3$};
+                            \addplot [red] {-sqrt(x^3-3*x+3)};
+                        \end{axis}
+                    \end{tikzpicture}
+                }
+                \subfigure[$\Delta > 0$]{
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=1.5,
+                            ymin=-2,
+                            ymax=2,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=-1:0, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3-x)};
+                            \addplot [red] {-sqrt(x^3-x)};
+                        \end{axis}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=1.5,
+                            ymin=-2,
+                            ymax=2,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=0.1:1.5, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3-x)}
+                                node[right] {$y^2=x^3-x$};
+                            \addplot [red] {-sqrt(x^3-x)};
+                        \end{axis}
+                    \end{tikzpicture}
+                } 
+                \subfigure[Одна касательная. $\Delta = 0 = c_4$]{
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=5,
+                            ymin=-5,
+                            ymax=5,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=0:3, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3)}
+                                node[right] {$y^2=x^3$};
+                            \addplot [red] {-sqrt(x^3)};
+                        \end{axis}
+                    \end{tikzpicture}
+                }
+                \subfigure[$\Delta < 0$]{
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=1.5,
+                            ymin=-2,
+                            ymax=2,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=0:1, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3+x)}
+                                node[right] {$y^2=x^3+x$};
+                            \addplot [red] {-sqrt(x^3+x)};
+                        \end{axis}
+                    \end{tikzpicture}
+                }               
+                \caption{Эллиптические кривые над $\R$}
+            \end{figure}
 
+            
 \end{document}
