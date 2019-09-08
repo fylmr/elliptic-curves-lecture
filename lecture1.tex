@@ -27,6 +27,7 @@
 \newcommand{\Q}{{{\mathbb Q}}}
 \newcommand{\R}{{{\mathbb R}}}
 \newcommand{\F}{{{\mathbb F}}}
+\newcommand{\PP}{{{\mathbb P}}}
 \newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
 \newcommand*{\IN}{\ensuremath{\mathbb{N}}}
 \newcommand*{\IR}{{{\mathbb R}}}
@@ -72,14 +73,17 @@
   \vspace*{4mm}
 }
 
-\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Scribe: #4}{Лекция #1}}
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
 
 \newtheorem{theorem}{Теорема}
 \newtheorem{corollary}[theorem]{Следствие}
 \newtheorem{lemma}[theorem]{Лемма}
 \newtheorem{observation}[theorem]{Observation}
 \newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Определение}
+
 \newtheorem{claim}[theorem]{Утверждение}
 \newtheorem{fact}[theorem]{Факт}
 \newtheorem{assumption}[theorem]{Предположение}
@@ -98,49 +102,93 @@
 \parskip 1.5ex
 
 \begin{document}
-
-\lecture{Номер лекции --- Дата, 2019}{Осень 2019}{Лектор: Елена Киршанова}{ВАШЕ ИМЯ}
-
-\section{Задача}
-
-
-\begin{theorem}
-	Утверждение теоремы
-\end{theorem}
-
-\begin{proof}
-	Доказательство
-\end{proof}
-
-\section{Алгоритм}
-
-\begin{algorithm}[ph]
-	\caption{Название алгоритма}
-	\label{alg:AlgName}
-	\textbf{Input:} Входные данные \\
-	\textbf{Output:} Выходные данные
-	
-	\begin{algorithmic}[1]
-		
-		\State 
-		\State{} \Return{} 
-	\end{algorithmic}
-
-\end{algorithm}
-
-
-\section{Анализ}
-\subsection{Blah blah blah}
-Текст лекции
-
-\subsubsection{Blah blah blah}
-Текст лекции \bigO
-
-
-
-
-\paragraph{Литература.}
-Ссылки на литературу, упомянутую в лекции. Если используется BibTeX, необходимо  .bbl file into your .tex
-source. 
+    
+    \lecture{Номер лекции --- 06.09.2019}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+    
+    
+    \paragraph{Литература.}
+        \begin{enumerate}
+            \item A. Menezes "Elliptic curve public key cryptosystems"
+            \item D. Hankerson, A. Menezes, S. Vanstone "Guide to elliptic curve cryptography"
+            \item J. Silverman "Arithmetic of Elliptic Curves"
+        \end{enumerate}
+    
+    \section{Введение}
+    
+        $\F_q$ — конечное поле, $|\F_q|=q=p^k$, $p$ — прсотое, $K$ — поле, $\Bar{K}$ — алгебраическое замыкание.
+        
+        \subsection{Определения}
+        
+            \begin{definition} Уравнение Вейерштрасса в проективных координатах 
+            — уравнение степени 3 вида 
+                \begin{equation}
+                    F: Y^2Z + a_1 X Y Z + a_3 Y Z^2 = X^3 + a_2 X^2 Z + a_4 X Z^2 + a_6 Z^3
+                \end{equation}
+                где $a_i \in K$.
+                Уравнение Вейерштрасса \textbf{гладкое} (или несингулярное), если для любых проективных точек $P=(X:Y:Z) \in \PP^2(K)$ \footnotemark[1], удовлетворяющих условию (1), хотя бы одна из частных производных $\frac{dF}{dX},\frac{dF}{dY},\frac{dF}{dZ}$ не обращается в $0$ на $P$. Если все три частных производные обращаются в $0$ хотя бы на одной точке $P$ (точке сингулярности), (1) — сингулярное уравнение.
+                \footnotetext[1]{проективная плоскость над $K$ — множество классов эквивалентности на $K^3\setminus \{0,0,0\}$, т.е. $\overrightarrow{X} \sim \overrightarrow{Y}$, если $x_1=u*y_1,x_2=u*y_2,x_3=u*y_3$ }
+            \end{definition}
+            
+            \begin{definition} 
+                \textbf{Эллиптическая кривая} $E$ (алгебраическая кривая рода 1) — множество всех точек в $\PP^2(K)$, удовлетворяющих гладкой кривой (1). Существует всего одна точка в $E$ с координатой $Z=0: (0:1:0)$. Обозначаем эту точку $\bigO$, называем точкой в бесконечности. 
+            \end{definition}
+            
+            \begin{definition} 
+                Уравнение Вейерштрасса в аффинных координатах: 
+                \[
+                (x=X/Z, y=Y/Z)
+                \]
+                \begin{equation}
+                    f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6
+                \end{equation}
+                Тогда $F(K) = \{ (x,y) \in K \times K: f(x,y)=0 \} \union \{\bigO\}$.
+                
+                Если $a_i \in K \forall i$, то будем говорить, что кривая $E$ определена над $K$.
+            \end{definition}
+            
+            \begin{definition}
+                Обозначим
+                \begin{align}
+                    d_2 &= a_1^2 + 4a_2 \\ \nonumber
+                    d_4 &= 2a_4 + a_1a_3 \\ \nonumber
+                    d_6 &= a_3^2 + 4a_6 \\ \nonumber
+                    d_8 &= a_1^2a_6 + 4a_2a_6 - a_1a_3a_4 + a_2a_3^2 - a_4^2 \\ \nonumber
+                    c_4 &= d_2^2 - 24d_4 \\ \nonumber
+                    \text{Для проверки: } 4d_8 &= d_2d_6 - d_4^2
+                \end{align}
+            \end{definition}
+            
+        \begin{theorem}
+        	Утверждение теоремы
+        \end{theorem}
+        
+        \begin{proof}
+        	Доказательство
+        \end{proof}
+    
+    \section{Алгоритм}
+    
+        \begin{algorithm}[ph]
+        	\caption{Название алгоритма}
+        	\label{alg:AlgName}
+        	\textbf{Input:} Входные данные \\
+        	\textbf{Output:} Выходные данные
+        	
+        	\begin{algorithmic}[1]
+        		
+        		\State 
+        		\State{} \Return{} 
+        	\end{algorithmic}
+        
+        \end{algorithm}
+        
+    
+    \section{Анализ}
+        \subsection{Blah blah blah}
+        Текст лекции
+        
+        \subsubsection{Blah blah blah}
+        Текст лекции $\bigO$
+        
 
 \end{document}
