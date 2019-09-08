@@ -1,0 +1,146 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+
+
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Scribe: #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+
+\lecture{Номер лекции --- Дата, 2019}{Осень 2019}{Лектор: Елена Киршанова}{ВАШЕ ИМЯ}
+
+\section{Задача}
+
+
+\begin{theorem}
+	Утверждение теоремы
+\end{theorem}
+
+\begin{proof}
+	Доказательство
+\end{proof}
+
+\section{Алгоритм}
+
+\begin{algorithm}[ph]
+	\caption{Название алгоритма}
+	\label{alg:AlgName}
+	\textbf{Input:} Входные данные \\
+	\textbf{Output:} Выходные данные
+	
+	\begin{algorithmic}[1]
+		
+		\State 
+		\State{} \Return{} 
+	\end{algorithmic}
+
+\end{algorithm}
+
+
+\section{Анализ}
+\subsection{Blah blah blah}
+Текст лекции
+
+\subsubsection{Blah blah blah}
+Текст лекции \bigO
+
+
+
+
+\paragraph{Литература.}
+Ссылки на литературу, упомянутую в лекции. Если используется BibTeX, необходимо  .bbl file into your .tex
+source. 
+
+\end{document}
