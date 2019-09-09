@@ -113,7 +113,7 @@
     \lecture{1 --- 06.09.2019}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
     
     
-    \paragraph{Литература.}
+    \textbf{Литература.}
         \begin{enumerate}
             \item A. Menezes "Elliptic curve public key cryptosystems"
             \item D. Hankerson, A. Menezes, S. Vanstone "Guide to elliptic curve cryptography"
@@ -382,9 +382,85 @@
                 \end{equation}
                 преобразует уравнение кривой $E_1$ в уравнение кривой $E_2$. Изоморфизм кривых задаёт отношение эквивалентности.
                 \begin{align*}
-                    \phi : (x,y)\mapsto (u^{-2}(x-r)&, \,u^{-3}(y-sx-t+rs))\,\text{— точки кривой $E_1$ в $E_2$} \\
-                    \psi : (x,y)\mapsto (u^2x+r&, \,u^3y+u^2sx+t))\, \text{— точки $E_2$ в $E_1$} \\
-                    \phi \circ \psi = id_{E_2}&, \psi \circ \phi = id_{E_1}.
+                    \phi : (x,y)&\mapsto (u^{-2}(x-r), \,u^{-3}(y-sx-t+rs))\,\text{— точки $E_1$ в $E_2$} \\
+                    \psi : (x,y)&\mapsto (u^2x+r, \,u^3y+u^2sx+t))\, \text{— точки $E_2$ в $E_1$} \\
+                    \phi \circ \psi = i&d_{E_2}, \psi \circ \phi = id_{E_1}.
                 \end{align*}
             \end{theorem}
+            
+            \begin{examples} $ $\newline
+                Кривая $E$ из (4) $\cong$ (2), если $char K \neq 2$.\newline
+                (5) $\cong$ (4) $\cong$ (2), если $char K \neq 2,3$.\newline
+                (6) $\cong$ (2), если $char K = 2, j(E_1)\neq0$.\newline
+                (7) $\cong$ (2), если $char K = 2, j(E_1)=0$
+            \end{examples}
+            
+            \begin{corollary}
+                Если $E_1, E_2$ определены над $K$ с $char(K) \neq 2,3$, то (9) можно упростить:
+                \[
+                    (x,y) \mapsto (u^2x, u^3y), u \neq 0
+                \]
+            \end{corollary}
+            
+            С помощью преобразования (9), можно вывести коэффициенты кривой $E_2$:
+            \begin{align}
+                a_1' &= \frac{1}{u}(a_1+2s) \\  \nonumber
+                a_2' &= \frac{1}{u^2}(a_2-sa_1+3r-s^2) \\ \nonumber
+                a_3' &= \frac{1}{u^3}(a_3+ra_1+2t) \\ \nonumber
+                a_4' &= \frac{1}{u^4}(a_4 = sa_3 + 2ra_2 = (t+rs)a_1 + 3r^2 - 2st) \\ \nonumber
+                a_6' &= \frac{1}{u^6}(a_6 + ra_4 + r^2a_2 + r^3 - ta_3 - t^2 - rta_1) \\ \nonumber
+            \end{align}
+            
+            Аналогично, можно получить уравнения для $d_i, j$:
+            \begin{align*}
+                \Delta' &= \frac{1}{u^{12}}\Delta \\
+                j' &= j
+            \end{align*}
+            
+            \begin{theorem}
+                $E_1 \cong E_2$ над $\Bar{K} \iff j(E_1)=j(E_2)$
+            \end{theorem}
+            \begin{proof}
+                Докажем для случая $char(K)\neq 2,3$ (см. Silverman для общего случая).
+                
+                $\implies$ следует из формул (10).
+                
+                $\Longleftarrow$ Рассмотрим
+                \begin{align*}
+                    E_1&:y^2=x^3+ax+b \\
+                    E_2&=(y')^2 = (x')^3+a'x'+b'
+                \end{align*}
+                Тогда из $j(E_1)=j(E_2) \Rightarrow$
+                \begin{align*}
+                    \frac{(4a)^3}{4a^3+27b^2} &= \frac{(4a')^3}{4(a')^3+27(b')^2} \\
+                    4^4a^3(a')^3 + 4^3a^327(b')^2 &= 4^4 a'^3a^3 + 4^3(a')^327b^2 \\
+                    a^3b^{12} &= a^{13}b^2 \tag{*}
+                \end{align*}
+                Нас интересуют только изоморфизмы вида $(x,y)\mapsto(u^2x', u^3y')$ (следствие 3).
+                
+                Рассмотрим 3 случая: \newline
+                \textbf{Случай 1.} $a = 0 \,(\Rightarrow j=0)$. Тогда $b\neq0$ (т.к. $\Delta \neq0$), $a'=0$;
+                \begin{equation*}
+                    y^2=x^3+b, \quad \quad y^{12} = x'^3 + b', \quad \quad u=(\frac{b}{b'})^{\frac{1}{6}}
+                \end{equation*}
+                
+                \textbf{Случай 2.} $b=0$ (Тогда $a \neq 0, b' = 0$).
+                \[
+                     u = (\frac{a}{a'})^{\frac{1}{4}}
+                \]
+                
+                \textbf{Случай 3.} $b\neq0 \implies a'b' \neq0$ 
+                \[
+                    u = (\frac{a}{a'})^{\frac{1}{4}} = (\frac{b}{b'})^{\frac{1}{6}}
+                \]
+            \end{proof}
+            
+            \textbf{Результаты}
+            \begin{enumerate}
+                \item Получить уравнение изоморфных для $E$ кривых над $K$, надо взять $(u,r,s,t)\in K$ и получить коэффициенты изоморфной кривой из (10). \newline
+                Сложность: $\bigO$ операций деления/умножения в $K$.
+                \item Проверить, являются ли две кривые $E_1/K, E_2/K$ изоморфными: решить (10) для неизвестных $(u,r,s,t)$. Если решение в $K$ существует, значит $E_1\cong E_2$. \newline
+                Сложность: полиномиальная -- решение системы уравнений в $K$.
+                \item Определить, над каким полем $L \subseteq K$ изоморфны кривые $E_1, E_2$: в каком расширении $K$ лежат решения системы (10).
+            \end{enumerate}
 \end{document}
