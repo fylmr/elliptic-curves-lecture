@@ -15,6 +15,7 @@
 \usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
 \usepackage{pgfplots, subfigure}
 
+\usepackage{biblatex}
 
 % MACROS 
 % PROBABILITY SYMBOLS
@@ -108,18 +109,14 @@
 \parindent 0in
 \parskip 1.5ex
 
+\addbibresource{books.bib}
+
 \begin{document}
     
     \lecture{1 --- 06.09.2019}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
-    
-    
-    \textbf{Литература.}
-        \begin{enumerate}
-            \item A. Menezes "Elliptic curve public key cryptosystems"
-            \item D. Hankerson, A. Menezes, S. Vanstone "Guide to elliptic curve cryptography"
-            \item J. Silverman "Arithmetic of Elliptic Curves"
-        \end{enumerate}
-    
+
+    \printbibliography
+
     \section{Введение}
     
         $\F_q$ — конечное поле, $|\F_q|=q=p^k$, $p$ — прсотое, $K$ — поле, $\Bar{K}$ — алгебраическое замыкание.
@@ -129,20 +126,22 @@
             \begin{definition} Уравнение Вейерштрасса в проективных координатах 
             — уравнение степени 3 вида 
                 \begin{equation}
+                \label{eq:weierstrassF}
                     F: Y^2Z + a_1 X Y Z + a_3 Y Z^2 = X^3 + a_2 X^2 Z + a_4 X Z^2 + a_6 Z^3
                 \end{equation}
                 где $a_i \in K$.
-                Уравнение Вейерштрасса \textbf{гладкое} (или несингулярное), если для любых проективных точек $P=(X:Y:Z) \in \PP^2(K)$ \footnotemark[1], удовлетворяющих условию (1), хотя бы одна из частных производных $\frac{dF}{dX},\frac{dF}{dY},\frac{dF}{dZ}$ не обращается в $0$ на $P$. Если все три частных производные обращаются в $0$ хотя бы на одной точке $P$ (точке сингулярности), (1) — сингулярное уравнение.
-                \footnotetext[1]{проективная плоскость над $K$ — множество классов эквивалентности на $K^3\setminus \{0,0,0\}$, т.е. $\overrightarrow{X} \sim \overrightarrow{Y}$, если $x_1=u*y_1,x_2=u*y_2,x_3=u*y_3$ }
+                Уравнение Вейерштрасса \textbf{гладкое} (или несингулярное), если для любых проективных точек $P=(X:Y:Z) \in \PP^2(K)$ \footnotemark[1], удовлетворяющих условию (\ref{eq:weierstrassF}), хотя бы одна из частных производных $\frac{dF}{dX},\frac{dF}{dY},\frac{dF}{dZ}$ не обращается в $0$ на $P$. Если все три частных производные обращаются в $0$ хотя бы на одной точке $P$ (точке сингулярности), (\ref{eq:weierstrassF}) — сингулярное уравнение.
+                \footnotetext[1]{проективная плоскость над $K$ — множество классов эквивалентности на $K^3\setminus \{0,0,0\}$, т.е. $\overrightarrow{X} \sim \overrightarrow{Y}$, если $x_1=u\cdot y_1,x_2=u \cdot y_2, x_3=u \cdot y_3$ }
             \end{definition}
             
             \begin{definition} 
-                \textbf{Эллиптическая кривая} $E$ (алгебраическая кривая рода 1) — множество всех точек в $\PP^2(K)$, удовлетворяющих гладкой кривой (1). 
+                \textbf{Эллиптическая кривая} $E$ (алгебраическая кривая рода 1) — множество всех точек в $\PP^2(K)$, удовлетворяющих гладкой кривой (\ref{eq:weierstrassF}). 
                 
                 Существует всего одна точка в $E$ с координатой $Z=0\,$: $(0:1:0)$. Обозначаем эту точку $\bigO$, называем точкой в бесконечности. 
             \end{definition}
             
             \begin{definition} 
+            \label{eq:weierstrassaffine}
                 Уравнение Вейерштрасса в аффинных координатах $(x=X/Z, y=Y/Z)$:
                 \begin{equation}\label{eq:weierstrassequation}
                     f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6
@@ -162,7 +161,7 @@
                     c_4 &= d_2^2 - 24d_4 \\ \nonumber
                     \text{Для проверки: } 4d_8 &= d_2d_6 - d_4^2
                 \end{align}
-                Тогда \textbf{дискриминант} уравнения (2) определяется как 
+                Тогда \textbf{дискриминант} уравнения (\ref{eq:weierstrassaffine}) определяется как 
                 \[
                     \Delta = -d_2^2d_8 - 8d_4^3-27d_6^2+9d_2d_4d_6,
                 \]
@@ -172,7 +171,8 @@
                 \]
             \end{definition}
             
-            \begin{theorem}[Sil, Thm. 1.4]
+            \begin{theorem}[]
+                \autocite[Thm. 1.4]{silverman}
                 Кривая, заданная уравнением Вейерштрасса, может быть классифицирована как:
                 \begin{enumerate}[itemsep=0pt, topsep=0pt, partopsep=0pt]
                     \item Несингулярная $\iff \Delta \neq 0$ ($\implies$ задаёт эллиптическую кривую) 
@@ -301,7 +301,7 @@
             
             \clearpage
             
-        \subsection{Особые формы уравнения (2)}
+        \subsection{Особые формы уравнения (\ref{eq:weierstrassequation})}
             \paragraph{$char K \neq 2$:}
             \begin{equation*}
                 f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6 \tag{\ref{eq:weierstrassequation}}
@@ -322,17 +322,18 @@
             \[
             \implies y^2 = 4x^3 + d_2x^2 + 2d_4 + d_6
             \]
-            \textit{Вывод: } $(x, y)\mapsto(x, \frac{1}{2}(y-a_1x-a_3))$ для $E/K, char K \neq 2$, преобразует кривую вида (2) к кривой
+            \textit{Вывод: } $(x, y)\mapsto(x, \frac{1}{2}(y-a_1x-a_3))$ для $E/K, char K \neq 2$, преобразует кривую вида (\ref{eq:weierstrassequation}) к кривой
             \begin{equation}
+            \label{eq:eOverKcharKNot2}
                 E/K: y^2 = 4x^3 + d_2x^2 + 2d_4 + d_6.
             \end{equation}
             
             \paragraph{$char K \neq 2, 3$:} 
-            Дополним правую часть (4) до полного куба. Замена переменных
+            Дополним правую часть (\ref{eq:eOverKcharKNot2}) до полного куба. Замена переменных
             \[
-            (x, y) \mapsto (\frac{x-3d_2}{36}, \frac{y}{216})
+            (x, y) \mapsto \left(\frac{x-3d_2}{36}, \frac{y}{216}\right)
             \]
-            Преобразует (4) в 
+            Преобразует (\ref{eq:eOverKcharKNot2}) в 
             \begin{align}
                 E/K: y^2 = x^3 + ax + b
             \end{align}
@@ -378,6 +379,7 @@
                 E_1 \cong E_2 \iff \exists u,r,s,t \in K, u\neq0, \text{такие что замена}
                 \end{equation*}
                 \begin{equation}
+                \label{eq:xytransition}
                     (x,y) \mapsto (u^2x+r, u^3y+ u^2sx+t)
                 \end{equation}
                 преобразует уравнение кривой $E_1$ в уравнение кривой $E_2$. Изоморфизм кривых задаёт отношение эквивалентности.
@@ -396,7 +398,8 @@
             \end{examples}
             
             \begin{corollary}
-                Если $E_1, E_2$ определены над $K$ с $char(K) \neq 2,3$, то (9) можно упростить:
+            \label{cor3}
+                Если $E_1, E_2$ определены над $K$ с $char(K) \neq 2,3$, то (\ref{eq:xytransition}) можно упростить:
                 \[
                     (x,y) \mapsto (u^2x, u^3y), u \neq 0
                 \]
@@ -404,6 +407,7 @@
             
             С помощью преобразования (9), можно вывести коэффициенты кривой $E_2$:
             \begin{align}
+            \label{eq:e2transition}
                 a_1' &= \frac{1}{u}(a_1+2s) \\  \nonumber
                 a_2' &= \frac{1}{u^2}(a_2-sa_1+3r-s^2) \\ \nonumber
                 a_3' &= \frac{1}{u^3}(a_3+ra_1+2t) \\ \nonumber
@@ -421,9 +425,9 @@
                 $E_1 \cong E_2$ над $\Bar{K} \iff j(E_1)=j(E_2)$
             \end{theorem}
             \begin{proof}
-                Докажем для случая $char(K)\neq 2,3$ (см. Silverman для общего случая).
+                Докажем для случая $char(K)\neq 2,3$ (см. \cite{silverman} для общего случая).
                 
-                $\implies$ следует из формул (10).
+                $\implies$ следует из формул (\ref{eq:e2transition}).
                 
                 $\Longleftarrow$ Рассмотрим
                 \begin{align*}
@@ -436,31 +440,33 @@
                     4^4a^3(a')^3 + 4^3a^327(b')^2 &= 4^4 a'^3a^3 + 4^3(a')^327b^2 \\
                     a^3b^{12} &= a^{13}b^2 \tag{*}
                 \end{align*}
-                Нас интересуют только изоморфизмы вида $(x,y)\mapsto(u^2x', u^3y')$ (следствие 3).
+                Нас интересуют только изоморфизмы вида $(x,y)\mapsto(u^2x', u^3y')$ (Следствие \ref{cor3}).
                 
                 Рассмотрим 3 случая: \newline
                 \textbf{Случай 1.} $a = 0 \,(\Rightarrow j=0)$. Тогда $b\neq0$ (т.к. $\Delta \neq0$), $a'=0$;
                 \begin{equation*}
-                    y^2=x^3+b, \quad \quad y^{12} = x'^3 + b', \quad \quad u=(\frac{b}{b'})^{\frac{1}{6}}
+                    y^2=x^3+b, \quad \quad y^{12} = x'^3 + b', \quad \quad u=\left(\frac{b}{b'}\right)^{\frac{1}{6}}
                 \end{equation*}
                 
                 \textbf{Случай 2.} $b=0$ (Тогда $a \neq 0, b' = 0$).
                 \[
-                     u = (\frac{a}{a'})^{\frac{1}{4}}
+                     u = \left(\frac{a}{a'}\right)^{\frac{1}{4}}
                 \]
                 
                 \textbf{Случай 3.} $b\neq0 \implies a'b' \neq0$ 
                 \[
-                    u = (\frac{a}{a'})^{\frac{1}{4}} = (\frac{b}{b'})^{\frac{1}{6}}
+                    u = \left(\frac{a}{a'}\right)^{\frac{1}{4}} = \left(\frac{b}{b'}\right)^{\frac{1}{6}}
                 \]
             \end{proof}
             
             \textbf{Результаты}
             \begin{enumerate}
-                \item Получить уравнение изоморфных для $E$ кривых над $K$, надо взять $(u,r,s,t)\in K$ и получить коэффициенты изоморфной кривой из (10). \newline
-                Сложность: $\bigO$ операций деления/умножения в $K$.
-                \item Проверить, являются ли две кривые $E_1/K, E_2/K$ изоморфными: решить (10) для неизвестных $(u,r,s,t)$. Если решение в $K$ существует, значит $E_1\cong E_2$. \newline
+                \item Получить уравнение изоморфных для $E$ кривых над $K$, надо взять $(u,r,s,t)\in K$ и получить коэффициенты изоморфной кривой из (\ref{eq:e2transition}). \newline
+                Сложность: $\bigO(1)$ операций деления/умножения в $K$.
+                \item Проверить, являются ли две кривые $E_1/K, E_2/K$ изоморфными: решить (\ref{eq:e2transition}) для неизвестных $(u,r,s,t)$. Если решение в $K$ существует, значит $E_1\cong E_2$. \newline
                 Сложность: полиномиальная -- решение системы уравнений в $K$.
-                \item Определить, над каким полем $L \subseteq K$ изоморфны кривые $E_1, E_2$: в каком расширении $K$ лежат решения системы (10).
+                \item Определить, над каким полем $L \subseteq K$ изоморфны кривые $E_1, E_2$: в каком расширении $K$ лежат решения системы (\ref{eq:e2transition}).
             \end{enumerate}
+            
+	
 \end{document}
