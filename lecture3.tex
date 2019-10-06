@@ -131,7 +131,7 @@
 	\label{def_02}
 	Для $n > 1$, $E$~---~эллиптическая кривая над полем $K$ 
 	$$
-	E[n] = \left\{ {\left. {P \in E\left( {\bar K} \right)} \right|nP = \mathcal{O}} \right\}
+	E[n] = \left\{ {\left. P \in E(\bar K)\right|nP = \mathcal{O}} \right\}
 	$$
 	--- точки $n$-кручения.
 \end{definition}
@@ -141,7 +141,7 @@
 \begin{itemize}
 	\item $charK \ne 2 \Rightarrow E \cdot {y^2} \pm f\left( x \right),\quad \deg f\left( x \right) = 3 \Rightarrow $
 	$$
-	{y^2} = \left( {x - {e_1}} \right)\left( {x - {e_2}} \right)\left( {x - {e_i}} \right),\quad {e_i} - {\text{ корни }}f\left( x \right){\text{ в }}\bar K
+	{y^2} = \left( {x - {e_1}} \right)\left( {x - {e_2}} \right)\left( {x - {e_3}} \right),\quad {e_i} - {\text{ корни }}f\left( x \right){\text{ в }}\bar{K}
 	$$
 	
 	Для $\forall P \in E$ справедливо: $2P = \mathcal{O} \Leftrightarrow $ касательная $l$ в $P$~---~вертикальная $ \Rightarrow y = 0$ $ \Rightarrow $
@@ -186,11 +186,10 @@
 \end{lemma}
 
 Можно показать, что [Was. \S~3.1]
-
-\begin{align*}
-E\left[ 3 \right] &\cong {\Z_3} \oplus {\Z_3}, & {\text{ при }}char K \ne 3 \\
-E\left[ 3 \right] &\cong 0 \text{ либо } E\left[ 3 \right] \cong \Z_3, & {\text{ при }} char K = 3
-\end{align*}
+    \begin{align*}
+    E\left[ 3 \right] &\cong {\Z_3} \oplus {\Z_3}, & {\text{ при }}char K \ne 3 \\
+    E\left[ 3 \right] &\cong 0 \text{ либо } E\left[ 3 \right] \cong \Z_3, & {\text{ при }} char K = 3
+    \end{align*}
 
 В общем случае, справедлива теорема \ref{theor_02}:
 
@@ -220,7 +219,7 @@ E\left[ 3 \right] &\cong 0 \text{ либо } E\left[ 3 \right] \cong \Z_3, & {\t
 
 Важность:
 \begin{itemize}
-	\item [--] описывают отображение $ n: {P_{ \leftrightarrow n}} \cdot P$
+	\item [--] описывают отображение $ n: P \leftrightarrow n \cdot P$
 	\item [--] используются в алгоритме подсчета точек кривой
 	\item [--] используются в вычислениях изогений
 \end{itemize}
@@ -229,18 +228,16 @@ E\left[ 3 \right] &\cong 0 \text{ либо } E\left[ 3 \right] \cong \Z_3, & {\t
 	\label{def_04}
 	$A,B,x,y$~---~переменные.
 	
-	Многочлены деления ${\Psi _m} \in \Z\;\left[ {x,y,A,B} \right]$ определяются рекуррентными соотношениями:
-	$$
-	\begin{aligned}
-	&{\Psi _0} = 0 \\
-	&{\Psi _1} = 1 \\
-	&{\Psi _2} = 2y \\
-	&{\Psi _3} = 3{x^4} + 6A{x^2} + 12Bx - {A^2} \\
-	&{\Psi _4} = 4{y^2}\left( {{x^6} + 5A{x^4} + 20b{x^3} - 5{A^2}{x^2} - 4ABx - z{B^2} - {A^3}} \right) \\
-	&{\Psi _{2m + 1}} = {\Psi _{m + 2}}\Psi _m^3 - {\Psi _{m - 1}}\Psi _{m + 1}^3 \quad m \geqslant 2 \\
-	&{\Psi _{2m}} = {\left( {2y} \right)^{ - 1}} \cdot {\Psi _m} \cdot \left( {{\Psi _{m + 2}}\Psi _{m - 1}^2 - {\Psi _{m - 2}}\Psi _{m + 1}^2} \right)\quad m \geqslant 3
-	\end{aligned}
-	$$
+	Многочлены деления ${\psi _m} \in \Z\;\left[ {x,y,A,B} \right]$ определяются рекуррентными соотношениями:
+    \begin{align*}
+	{\psi _0} &= 0 \\
+	{\psi _1} &= 1 \\
+	{\psi _2} &= 2y \\
+	{\psi _3} &= 3{x^4} + 6A{x^2} + 12Bx - {A^2} \\
+	{\psi _4} &= 4{y^2}\left( {{x^6} + 5A{x^4} + 20B{x^3} - 5{A^2}{x^2} - 4ABx - z{B^2} - {A^3}} \right) \\
+	{\psi _{2m + 1}} &= {\psi _{m + 2}}\psi _m^3 - {\psi _{m - 1}}\psi _{m + 1}^3, \quad m \geqslant 2 \\
+	{\psi _{2m}} &= {\left( {2y} \right)^{ - 1}} \cdot {\psi _m} \cdot \left( {{\psi _{m + 2}}\psi _{m - 1}^2 - {\psi _{m - 2}}\psi _{m + 1}^2} \right),\quad m \geqslant 3
+	\end{align*}
 \end{definition}
 
 Могут быть получены с помощью формул сложения в так называемых координатах Якоби.
@@ -248,38 +245,34 @@ E\left[ 3 \right] &\cong 0 \text{ либо } E\left[ 3 \right] \cong \Z_3, & {\t
 \underline{Свойства} (док-во: Was. Lemma 3.3)
 
 \begin{enumerate}
-	\item ${\Psi _n} \in \Z\left[ {{x_1}y_1^2 \cap B} \right]$ если $n$~---~нечетное
-	
-	${\Psi _n} \in Ry\Z\left[ {x,{y^2},A,B} \right]$, если $n$~---~четное. 
-	
+	\item 
+    	${\psi _n} \in \Z[x, y^2, A, B]$ если $n$ — нечетное \\
+    	${\psi _n} \in 2y\Z[x, y^2, A, B]$, если $n$ — четное. 
 	\item Определим
-	$$
-	\begin{aligned}
-	{\varphi _m} &= x \cdot \Psi _m^2 - {\Psi _{m + 1}}{\Psi _{m - 1}} \\
-	{\omega _m} &= {\left( {4y} \right)^{ - 1}}\left( {{\Psi _{m + 2}}\Psi _{m - 1}^2 - {\Psi _{m - 2}}\Psi _{m + 1}^2} \right) \\
-	{\varphi _n} &\in \Z\left[ {x{y^2},A,B} \right]\quad \forall n \\
-	{\omega _n} &\in y\Z\;\left[ {x{y^2},A,B} \right],\quad n{\text{  --  нечетное}} \\
-	{\omega _n} &\in \Z\left[ {x{y^2},A,B} \right],\quad n{\text{ -- четное}}
-	\end{aligned}
-	$$
+    	\begin{align*}
+    	{\varphi _m} &= x \cdot \psi _m^2 - {\psi _{m + 1}}{\psi _{m - 1}} \\
+    	{\omega _m} &= {\left( {4y} \right)^{ - 1}}\left( {{\psi _{m + 2}}\psi _{m - 1}^2 - {\psi _{m - 2}}\psi _{m + 1}^2} \right) \\
+    	{\varphi _n} &\in \Z\left[ {x, {y^2},A,B} \right], \forall n \\
+    	{\omega _n} &\in y\Z\;\left[ {x, {y^2},A,B} \right], n{\text{  --  нечетное}} \\
+    	{\omega _n} &\in \Z\left[ {x, {y^2},A,B} \right],n{\text{ -- четное}}
+    	\end{align*}
+
 	
-	\item Для эллиптической кривой $E:\:{y^2} = {x^3} + Ax + B$, в множествах ${\Psi _n}$, ${\Phi _n}$ можно сделать замену ${y^2} \mapsto {x^3} + Ax + B$ и рассматривать их как многочлены от $x$ (в $\Z\left[ {x,A,B} \right]$). Тогда 
-	$$
-	\begin{aligned}
-	{\varphi _n}\left( x \right) &= {X^{{n^2}}} + {\text{ мономы степени }} < {n^2} \\
-	\Psi _n^2\left( x \right) &= {n^2}{x^{{n^2} - 1}} + {\text{ мономы степени }} < {n^2} - 1
-	\end{aligned}
-	$$
+	\item Для эллиптической кривой $E: {y^2} = {x^3} + Ax + B$, в многочленах ${\psi _n}$, ${\phi _n}$ можно сделать замену ${y^2} \mapsto {x^3} + Ax + B$ и рассматривать их как многочлены от $x$ (в $\Z\left[ {x,A,B} \right]$). Тогда 
+    	\begin{align*}
+    	{\varphi _n}\left( x \right) &= {X^{{n^2}}} + {\text{ мономы степени }} < {n^2} \\
+    	\psi _n^2\left( x \right) &= {n^2}{x^{{n^2} - 1}} + {\text{ мономы степени }} < {n^2} - 1
+    	\end{align*}
+
 \end{enumerate}
 
 \begin{theorem}
 	\label{theor_03}
-	Пусть $E \cdot {y^2} = {x^3} + Ax + B$ ($ \Rightarrow char\;X + 2,3$) $P = \left( {x,y} \right) \in E$, $n \in \mathbb{N}$, $n \in {\mathbb{N}_ + }$. Тогда
-	$$nP = \left( {\frac{{{\Phi _n}\left( x \right)}}{{\Psi _n^2\left( x \right)}},\;\frac{{{\omega _n}\left( x \right)}}{{{{\left( {{\Psi _n}\left( {x,y} \right)} \right)}^3}}}} \right)
+	Пусть $E: {y^2} = {x^3} + Ax + B$ ($ \Rightarrow char X \neq 2,3$) $P = \left( {x,y} \right) \in E$, $n \in {\N_+ }$. Тогда
+	$$nP = \left( {\frac{{{\phi _n}\left( x \right)}}{{\psi _n^2\left( x \right)}},\;\frac{{{\omega _n}\left( x \right)}}{{{{\left( {{\psi _n}\left( {x,y} \right)} \right)}^3}}}} \right)
 	$$
 \end{theorem}
 
-Таким образом, отображение (эндоморфизм) <<умножение на $n$>> задается рациональными функциями. 
-
+Таким образом, отображение (эндоморфизм) <<умножение на $n$>> $n \cdot P$ задается рациональными функциями.
 \end{document}
 
