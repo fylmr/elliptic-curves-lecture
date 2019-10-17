@@ -290,7 +290,7 @@ $$
 
 \section*{Алгоритм вычисления $d$ -- степени расширения $[{K_{E,n}}:K]$}
 
-Вход: $n \geqslant 3$, $q$, $A, B$ $( E:\:x{y^2} = {x^3} + Ax + b,\;\;A,B \in \F_q )$
+Вход: $n \geqslant 3$, $q$, $A, B$ $( E:\:x{y^2} = {x^3} + Ax + B,\;\;A,B \in \F_q )$
 
 Выход: $d$. 
 
@@ -305,25 +305,30 @@ $$
 	
 	\item Вычислить $c = (\dfrac{x_i^3 + A{x_i} + B}{\F_{q^{d_i}}})$, где $x_i$~---~корень $f_i$.
 	
-	\item If $c_i = - 1$:
+	\item if $c_i = - 1$:
 	
 	\quad return $d = 2\ell$
 	
 	\item ${d^*} = lcm( {\operatorname{ord} ( {q,n}),{d_i}})$
 	
-	If ${d^*} = \ell$ or $\ell = n \cdot {d^*}$
+	if ${d^*} = \ell$ or $\ell = n \cdot {d^*}$:
 	
 	\quad return $d = \ell$
 	
 	return $d = 2\ell$ 
 \end{enumerate}
 
+\subsection*{Оценка сложности} \\
+Шаг $1$. $\deg \psi_n = n^2 - 1$. Грубо: $\operatorname{poly}(n)$.\\
+Шаг $2$. В Sage Berlakamp-Zessenhaus: $\bigO( (\deg \psi_n)^3 + (\deg \psi_n)^2 \cdot \operatorname{lg}(n^2) \cdot \operatorname{lg}q  )$.\\
+Шаг $5$. Наивно (baby step / giant step): $\bigO(\sqrt{q^{d_i}})$. Можно привести к вычислению символа Лежандра над $\F_q$.
+
+Итого: $\operatorname{poly}(n) \;/\; \bigO(\operatorname{poly}(n) + \sqrt{q^{d_i}})$
+
 \begin{remark}
 	Алгоритм может быть адаптирован для вычисления самой группы точек $n$-кручения $E[ n]$, если $\forall {x_i}$ -- корень ${f_i}$, вычислить соответствующие ${y_i}$:\\
 	для $n = 2, E[n]$ вычисляется разложением многочлена ${x^3} + Ax + B$ (см. лекцию~\#~3) \\
 	для $n = 1, E[n] = \{ \bigO \}$. 
 \end{remark}
-
-
 \end{document}
 
