@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode} 
 \usepackage{enumitem}
@@ -60,6 +61,10 @@
 % Misc
 \newcommand{\eps}{\varepsilon}
 \newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+%proper overline reduced by some mu's, re-adjust if needed
+\newcommand{\overbar}[1]{\overline{\mkern-0.0mu#1\mkern-4.0mu}}
 
  
 \newcommand{\handout}[5]{
@@ -120,17 +125,17 @@
 \lecture{№5 — 11.10.19}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
 
 \section{Вычисление символа Лежандра $\left(\frac{\cdot}{\Fqd}\right)$}
-В алгоритме вычисление $d = [K_{E, n} : K = \F_q]$ (лекция №4) вызывается алгоритм вычисления символа $\left( \dfrac{x_i^3 + ax_i + b}{\Fqd} \right)$. 
+В алгоритме вычисление $d = [K_{E, n} : K = \F_q]$ (Лекция №4) вызывается алгоритм вычисления символа $\left( \dfrac{x_i^3 + ax_i + b}{\Fqd} \right)$. 
 $$
 	\left( \frac{x}{\Fqd} \right) =
 	\begin{cases}
-		1,& \exists t \in (\Fqd)^\times : t^2  = x[q^{d_i}] \\
-		-1,& \not\exists t \in (\Fqd)^\times : t^2  = x[q^{d_i}] \\
+		1,& \exists t \in (\Fqd)^\times : t^2  = x \bmod q^{d_i} \\
+		-1,& \not\exists t \in (\Fqd)^\times : t^2  = x \bmod q^{d_i} \\
 		0, & x = 0.
 	\end{cases}
 $$
 Покажем, что вычисление $\left( \dfrac{\cdot}{\Fqd} \right)$ сводится к вычислению $\left( \dfrac{\cdot}{\F_q} \right)$. \\
-В наших примерах $q$ — простое $\Rightarrow \left( \dfrac{\cdot}{\F_q} \right) = \left( \dfrac{\cdot}{q} \right) $ — символ Лежандра $\Rightarrow \exists$ эффективный алгоритм, т. ч. $\left(\dfrac{x}{q}\right) = x^{\frac{q-1}{2}}[q]$.
+В наших примерах $q$ — простое $\Rightarrow \left( \dfrac{\cdot}{\F_q} \right) = \left( \dfrac{\cdot}{q} \right) $ — символ Лежандра $\Rightarrow \exists$ эффективный алгоритм, т. ч. $\left(\dfrac{x}{q}\right) = x^{\frac{q-1}{2}} \bmod q$.
 
 \underline{Напоминание:} $L/K$ — конечное расширение, $G=\operatorname{Gal}(L/K)$. 
 
@@ -139,33 +144,33 @@ $$
 
 \begin{lemma}
 	\label{lemm_01}
-	Пусть $L/K$ — конечное расширение степени $d$: \\
-	$[ {L:K} ] = d$, $| k | = q$ $( {char K,\;char L \ne 2} )$. Для $x \in L$ справедливо 
+	Пусть $L/K$ — конечное расширение степени $d$, 
+	$[ {L:K} ] = d$, $\abs{K} = q$ $( {char K,\;char L \ne 2} )$. Для $x \in L$ справедливо 
 	$$
-	\left( {\frac{x}{L}} \right) \cdot \left( \frac{N_{L/K}( x )}{k} \right),{\text{ где }} N_{L/K} ( x ) = x\frac{q^d - 1}{q - 1}. 
+	\left( {\frac{x}{L}} \right) \cdot \left( \frac{N_{L/K}( x )}{k} \right),{\text{ где }} N_{L/K} ( x ) = x^{\frac{q^d - 1}{q - 1}}. 
 	$$
 \end{lemma}
 
 \begin{proof}
-    Положим $( {\frac{X}{L}} ) = 1 \Rightarrow \exists y \in L: y^2 = x.$ Тогда 
-    $$
-    {N_{L/K}}( x ) = {N_{L/K}}( {{y^2}} ) = {( {N'_{L/K}( y )} )^2}
-    $$
+    Положим $( {\frac{x}{L}} ) = 1 \Rightarrow \exists y \in L: y^2 = x.$ Тогда 
+    \[
+    {N_{L/K}}( x ) = {N_{L/K}}( {{y^2}} ) = {( {N'_{L/K}( y )} )^2},
+    \]
     т.к. 
-    $$
+    \[
     N_{L/K}( y ) \in K \Rightarrow \left( {\frac{N_{L/K}( y )}{k}} \right) = 1.
-    $$
+    \]
     
     Положим обратное $\left( {\dfrac{{{N_{L/K}}( x )}}{K}} \right) = 1$.
     
-    Запишем $x = gt$ для $g$ — образ $L$. Покажем, что $t$ — чётно ($ \Rightarrow x $ — квадратичный вычет в $L$).
+    Запишем $x = gt$ для $g$ — образующий $L$. Покажем, что $t$ — чётно ($ \Rightarrow x $ — квадратичный вычет в $L$).
     
-    Т.к. $\left( {\dfrac{N_{L/K}( x )}{K}} \right) = 1 \Rightarrow \exists y \in K: {y^2} = {N_{L/K}}( x ) = x\dfrac{{{q^d} - 1}}{{q - 1}} \Leftrightarrow $
+    Т.к. $\left( {\dfrac{N_{L/K}( x )}{K}} \right) = 1 \Rightarrow \exists y \in K: {y^2} = {N_{L/K}}( x ) = x^{\dfrac{{{q^d} - 1}}{{q - 1}}}  \Leftrightarrow $
     
     % $$
     % \underbrace {1 = {y^{q - 1}}}_{{\text{ т-ма Ферма }}} = {X^{\frac{{{q^d} - 1}}{2}}} \Rightarrow 
     % $$
-    $ \Leftrightarrow 1 = {g^{t \cdot \frac{{q^d} \pm 1}{2}}} \Rightarrow $ т. к. $g$ — образующий $( {{\text{ord}} g = {q^d} - 1} )$, то $2\ |\ t$.
+    $ \Leftrightarrow 1 = {g^{t \cdot \frac{{q^d} \pm 1}{2}}} \Rightarrow $ т. к. $g$ — образующий $( {{\text{ord }} g = {q^d} - 1} )$, то $2\ |\ t$.
 \end{proof}
 
 В случае алгоритма вычисления $d$:
@@ -179,15 +184,15 @@ $$
 
 \subsection{Эндоморфизм Фробениуса}
 
-${\varphi_q}: \overline {{\F_q}}  \to \overline {\F_q}, x \mapsto x^q $ — эндоморфизм (отображение) Фробениуса.
+${\varphi_q}: \overbar {{\F_q}}  \to \overbar {\F_q}, x \mapsto x^q $ — эндоморфизм (отображение) Фробениуса.
 
 Действие ${\varphi _q}$ на кривую $E$ над ${\F_q}$:\; ${\varphi _q}(x, y) = (x^q, y^q)$. ${\varphi _q}( 0 ) = \bigO$. 
 
 Свойства ${\varphi _q}:$
 
-$E$ — кривая над ${\F_q}, x, y \in E(\overline{\F_q})$
+$E$ — кривая над ${\F_q}, x, y \in E(\overbar{\F_q})$
 
-\textbf{1.} ${\varphi _q}( {x,y} ) \in E( \overline{\F_q} )$. 
+\textbf{1.} ${\varphi _q}( {x,y} ) \in E( \overbar{\F_q} )$. 
 
 Используя ${( {a + b} )^q} = {a^q} + {b^q}$ ($q$ — степень характеристики роля) и ${a^q} = a$ $\forall a \in {\F_q}:$
 $$
@@ -202,12 +207,12 @@ $$.
 $( {x \in {\F_q} \Leftrightarrow {\varphi _q}( x ) = x} )$
 
 
-\textbf{3.} $\mathop{Ker}(\varphi^n_q - 1) = E(\F_{q^n})$ \\
+\textbf{3.} $\mathop{\ker}(\varphi^n_q - 1) = E(\F_{q^n})$ \\
 Отображение $( x, y ) \mapsto ( x^q, y^q ) - ( {x,y} )$, где «$-$» это вычитание на $E$.
 
 \textbf{4.} $\# E( \F_q ) = \deg ( \varphi_q^n - 1 )$
 
-Из свойств 1–4 ${\varphi _q}$ можно доказать (см. Wash \S~4.2) следующую теорему. 
+Из свойств (1)--(4) для ${\varphi _q}$ можно доказать (см. Washington \S~4.2) следующую теорему. 
 
 \begin{theorem}[Теорема Хассе]
 	(Описывает границы $\# E( {{\F_q}} )$)
@@ -316,19 +321,18 @@ $$
 	$$
 \end{lemma}
 
-\begin{proof}Для таких $x_0\ \exists $ \\
-2 точки на $E$ $( {x,y} )$ с $x = {x_0}$ т.ч. $x_0^3 + a{x_0} + b \ne 0$ и кв. в ${\F_q}$
+\begin{proof}Для  $x_0 \in \F_q $ существуют либо \\2 точки на $E$ $( {x,y} )$ с $x = {x_0}$ т.ч. $x_0^3 + a{x_0} + b \ne 0$ и является кв. вычетов в ${\F_q}$, либо
 
-1 точка на $E$ —//— $x_0^3 + a{x_0} + b = 0$
+1 точка на $E$ с $x = {x_0}$ т.ч.  $x_0^3 + a{x_0} + b = 0$, либо
 
-$0$ точек на $E$ —//— $x_0^3 + a{x_0} + b$ — не кв. в ${\F_q}$
+$0$ точек на $E$ с $x = {x_0}$ т.ч. $x_0^3 + a{x_0} + b$ — не квадратичный вычет в ${\F_q}$
 
 $$
 \Rightarrow \# E( \F_q ) = 1 + \sum\limits_{x \in {\F_q}} {\left( {1 + \left( {\frac{{x^3} + ax + b}{\F_q}} \right)} \right)}
 $$
 \end{proof}
 
-Сложность $\bigO( {q \cdot {\text{poly}} \log q} )$, \\
+Сложность вычисления $\# E( \F_q )$  через квадратичные характеры: $\bigO( {q \cdot {\text{poly}} \log q} )$,
 где ${\text{poly}} \log q$ — вычисление $\left( {\dfrac{ \cdot }{\F_q}} \right)$.
 
 \end{document}
