@@ -1,0 +1,342 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc} 
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+
+\usepackage{biblatex}
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\Fqd}{{{\F_{q^{d_i}}}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+%proper overline reduced by some mu's, re-adjust if needed
+\newcommand{\overbar}[1]{\overline{\mkern-0.0mu#1\mkern-4.0mu}}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{remark}[theorem]{Замечание}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+%\addbibresource{books.bib}
+
+\begin{document}
+    % $(\frac{\cdot}{\F_q^{d_i}})$
+\lecture{№6 — 25.10.19}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+
+\section{Алгоритм подсчёт точек элл. кривой над $\F_q$}
+
+Из предыдущей лекции:\\
+$ E(\F_q): y^2 = x^3 + Ax + B $ — эллиптическая кривая.
+
+$\#E(\F_q) = \abs{E(\F_q)}$ — число $q$-рациональных точек кривой (или порядок кривой).
+
+Теорема Хассе даёт верхнюю и нижнюю границу оценки для $\abs{E(\F_q)}$:
+\[
+    \abs{q+1-\#E(\F_q)} \leq 2 \sqrt{q}
+\]
+
+Асимптотика: $\#E(\F_q) = \bigO(q)$
+
+Если $a = q + 1 - \#E(\F_q)$, то $\abs{a} \leq 2\sqrt{q}$, $a$ — след Фробениуса.
+
+Мы доказали, что $\#E(\F_q) = q + 1 + \sum_{x \in \F_q}\left(\dfrac{x^3 + Ax+ B}{\F_q}\right)$, где $\left(\dfrac{\cdot}{\F_q}\right)$ — кв. вычет в $\F_q$ (если $q$ — простое $\Rightarrow$ символ Лежандра) \\
+Время нахождения результата в таком случае: $\bigO(q \log q) = \softO(q)$ — экспоненциальное от числа бит $q$.
+
+\subsection{Алгоритм подсчёта точек Baby Step — Giant Step \\ = Алгоритм нахождения порядка точки $P\in E(\F_q)$ \\ (т.е.min $k: k\cdot P = \bigO$)}
+
+\underline{Идея}: Пусть $N = \#E(\F_q)$ — неизвестно.
+
+По теореме Лагранжа: $N\cdot P = \bigO \;\; \forall P$
+
+Т.к. $q+1+2\sqrt{q} \leq N \leq q+1+2\sqrt{q}$ (т.е. $N$ лежит в интервале р-ра $4\sqrt{q}$,
+мы можем проверить все $N$ из этого интервала: $N\cdot P =^? \bigO$).
+
+Наивный метод (брутфорс): $\bigO(\sqrt{q})$\\
+Алгоритм BS—GS (стандратный алгоритм нахождения коллизий / цикла функции) ускоряет до $\bigO(q^{\frac{1}{4}})$
+
+Для начала опишем алгоритм нахождения порядка точки $P\in E$
+
+\subsubsection{Алгоритм BS—GS для нахождения порядока точки $P$}
+
+\underline{Вход}: $P\in E(\F_q)$\\
+\underline{Выход}: $k = \operatorname{ord}(P)$
+
+1. $Q = (q+1)P$
+
+2. (BS) Выберем $m \in \Z$: $m > q^\frac{1}{4}$\\
+Вычислим и сохраним (в список $L$) все $\pm j \cdot P, j = 0..m$ сортируем $L$.
+
+3. (GS) Вычисляем точки $Q + k(2mP)$ для всех $k = -m ... m$, пока не найдём в списке $L$ точку $\pm  jP$, что 
+\[
+    Q + k(2mP) = \pm  jP
+\]
+$Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \bigO$
+
+4. $M = q+1+2mK \mp  j$ (порядок $P$ — делитель $M$)
+
+5. Факторизуем $M = p_1^{e_1}..p_r^{e_r}$
+
+6. Для $i = 1..r$:
+
+Вычислим $\left(\frac{M}{p_i} \right)$
+
+Если $\left(\frac{M}{p_i} \right)P=\bigO$:
+
+\quad $M \leftarrow \frac{M}{p_i}$
+
+\quad Вернуться к Шагу 5 (неоптимально, но корректно). 
+
+Если $\frac{M}{p_i}p_i \neq \bigO \; \forall i$:
+
+\quad Вернуть $M$.
+
+\subsubsection{Корректность}
+
+1. Найдём ли мы коллизию на шаге 3?
+\begin{lemma}[Разбиение элемента $x$ на $2m$ старших бит и $(\log x - 2m)$ младших]
+    Пусть $x \in \Z: \abs{x} \leq 2m^2$. Тогда $\exists \ x_0, x_1 \in \Z$, т.ч. $-m < x_0 \leq m, -m < x_1 \leq m$
+\end{lemma}
+\begin{proof}
+    Пусть
+    \begin{align*}
+        x_0 &= x \operatorname{mod} 2m \text{, где} \operatorname{mod} B \in (-\dfrac{B}{2}, \dfrac{B}{2}] \\
+        x_1 &= \frac{x-x_0}{2m}
+    \end{align*}
+    
+    Тогда $\abs{x_1} \leq \dfrac{2m^2 + m}{2m} < m+1$
+\end{proof}
+
+2. Почему шаг 6 возвращает порядок $P$?
+\begin{lemma}
+    Пусть $G$ — аддитивная группа, $g \in G$. Положим $M > 0$, что $Mg = 0$, $M = p_1^{e_1}...p_r^{e_r}$, где $p_i$ — различные простые. Тогда если $\left(\dfrac{M}{p_i}\right)g \neq 0\ \forall i \in \{1..r\}$, то $M$ — порядок $g$.
+\end{lemma}
+\begin{proof}
+    Пусть $k$ — порядок $g$. Тогда $k\ |\ M$. Положим $k \neq M$ (от противного).
+    
+    Пусть $p_i$ — простое делящее $\frac{M}{k}$.
+    
+    Тогда $(p_i \cdot k)\ |\ M$, или $k\ |\ \left(\frac{M}{p_i}\right) \Rightarrow \left(\frac{M}{p_i}\right)g = 0$ (т.е. мы нашли $p_i: \left(\frac{M}{p_i}\right)g = 0$), что противоречит утверждению теоремы $\Rightarrow k = M$.\\
+\end{proof}
+
+\subsubsection{Анализ сложности алгоритма}
+
+\underline{Шаг 1} (Быстрое вложение)
+
+$\bigO(\log q)$ операций <<+>> на кривой, каждый <<+>>: $\operatorname{poly lg} q \Rightarrow \bigO(\operatorname{poly lg} q)$
+
+\underline{Шаг 2}
+
+$\softO(m) = \softO(q^{1/4})$ — времени \\
+${\bigO}(q^{1/4})$ — память.
+
+\underline{Шаг 3}
+
+$\softO(2m) = \softO(q^{1/4})$ — ожидаемое количество переборов $k$.
+
+\underline{Шаг 4}
+
+Элементарные операции в $\F_q$
+
+\underline{Шаг 5}
+
+$L\left[\frac{1}{3}, \frac{64}{9}^{\frac{1}{3}}\right] = \exp{\left(\left[\frac{64}{9}^{\frac{1}{3}} + \bigO(1)\right] (\log n)^{\frac{1}{3}} (\log \log q)^{\frac{2}{3}} \right)}$
+
+\underline{Шаг 6}
+
+$\softO(\sqrt{\log M} \cdot \operatorname{poly} \log q) = \softO(\sqrt{\log M}) = \softO(\operatorname{poly} \log q)$\\
+макс. $r \approx \sqrt{\log M}$
+
+\textbf{Итого}: самый затратный шаг — №3,\ $\softO(q^{\frac{1}{4}})$
+
+\subsubsection{Замечания к алгоритму}
+\begin{enumerate}
+    \item Для оптимизации памяти (вычислений) на шаге 3 достаточно хранить\\ $x$-координату.
+    \item Классическим алгоритмом cycle finding (Поллард-$\rho$) можно реализовать алгоритм, используя только $\operatorname{poly} \log q$ памяти
+\end{enumerate}
+
+\subsection{Алгоритм вычисления $\#(\F_q)$}
+1. Выбрать $P \in E(\F_q)$ (случайно выбираем $x$-координату, посчитать $y: y^2 = x^3 + Ax+B$)
+
+2. Найти $k_p = \operatorname{ord}P$
+
+3. Повторить шаги (1), (2), получив множество порядков $\{k_{p_i} = \operatorname{ord} p_i\}_{i\leq t}$
+
+\quad $L = \operatorname{lcm}(k_{p_i})$,
+
+пока $L \in \left[q+1-2\sqrt{q}, q+1+2\sqrt{q} \right]$\\
+
+Всевозможные порядки, которые могут быть получены на шаге 3:
+\[
+    \operatorname{ord} p_i \in \{\prod_{0 \leq \ell_i \leq e_i} p_i^{e_i}\} \text{(все делители } \#E(\F_q)) \text{, где } \#E(\F_q) = \prod p_i^{e_i}
+\]
+Всего $\prod_{i=1}^r e_i$ всевозможных порядков, примерно $\softO(\log \#E(\F_q))$ повторов на шаге 3.
+
+\section{Алгоритм Схофа (Schoof's Algorithm)}
+\textit{R. Schoof "Counting points on elliptic curves over finite fields"}
+
+$E: y^2 = x^3 + Ax + B$
+
+Полиномиальный алгоритм от $\log q!, q$ — простое. 
+Основная идея: вычислить $\#E(\F_q) \operatorname{mod} \{2, 3 ... p\}$ — простые числа и затем восстановить $\#E(\F_q)$ по CRT.
+
+\textbf{1.} Вычисление $\#E(\F_q) \operatorname{mod} 2: \#E(\F_q)$ — чётно \\
+$\Leftrightarrow E(\F_q)$ содержит точку $\neq \bigO$ порядка 2. \\
+Точки порядка 2 имеют $y$-координату $= 0 \Leftrightarrow x^3 + Ax+B = \bigO$ в $\F_q$
+
+Как определить, есть ли у $x^3 + Ax+ B$ корни в $\F_q$?\\
+Все элементы $\F_q$ — корни $x^q-x$. Т.е. $x^3+Ax+B=0$ в $\F_q \Leftrightarrow \gcd(x^q - x, x^3+Ax+B) \neq 1$ в $\F_p[x]$
+
+$\exists$ эффективный алгоритм (вычисление $x^q$ проводится в $\F_p[x] / (x^3 + Ax+ B)$ ускоренным алгоритмом возведения в степень.
+
+Сложность: $\bigO(\log^3 q)$
+
+
+\textbf{2.} Обобщим на другие $\ell \in \{2..p\}, \ell \neq 2$
+
+Т.к. $|\#E(\F_q) - q - 1| < 2\sqrt{q}$, для получения $\#E(\F_q)$ достаточно рассмотреть простые $\ell$, что 
+\[
+    \prod_\ell \ell > 4\sqrt{q}
+\]
+По теореме о распределении простых чисел $(p_n \sim n \log n)$, нам будет достаточно взять $\bigO(\log q)$ простых $\ell$, каждый размером $\bigO(\log q)$
+
+\textbf{2.1.} Как и в случае $\ell = 2$, рассмотрим группу точек $\ell$-кручения 
+\[
+    E[\ell] = \{ P \in E(\overbar{\F_q}): \ell\cdot P = \bigO \} \simeq \Z/\ell\Z \times \Z/\ell\Z 
+\]
+$\psi_q(x) \in \F_q[x] - \ell$ — многочлены деления ($\in \F_q[x]$ т.к. мы берём простые (нечётные) $\ell$). Они могут быть эффективно получены в явном виде с помощью рекуррентных соотношений.
+
+\textbf{2.2.} Эндоморфизм Фробениуса $\phi_q: E \rightarrow E, (x,y)\mapsto (x^q, y^q)$ удовлетворяет соотношению (см. Лекцию №5)
+\begin{equation}
+\label{eq_1}
+    \phi_q^2 - a\phi + q = 0, \text{ где } a \text{ — след Фробениуса } (a = q+1-\#E(\F_q))
+\end{equation}
+\[
+    \text{(т.е. } (x^{q^2}, y^{q^2}) - [a](x^q, y^q) + [q] = \bigO)
+\]
+
+Соотношение (\ref{eq_1}) справедливо и $\operatorname{mod} \ell$, т.е.\\
+$\phi_q^2 - a'\phi + q' = 0$ для некоторых $a' \in \{0 .. \ell-1\}$,\\
+что $a \equiv a' \operatorname{mod} \ell, q' \in \{0 .. \ell-1\}, q=q' \operatorname{mod} \ell$
+
+Важно: соотношение (\ref{eq_1}) может быть задано с помощью многочленов $\Rightarrow$ для кандидатов $a'\ \exists$ эффективная проверка:
+\[
+    q'\cdot P = \left(\frac{\phi_{q'}(x)}{\psi^2_{q'}(x)}, \frac{\omega_{q'}(x,y)}{\psi^3_n(x,y)} \right)
+\]
+\[
+    (x^{q^2}, y^{q^2}) + q'(X,Y) \equiv a'(x^q, y^q) \operatorname{mod} \psi_\ell(x) \text{ и } \operatorname{mod} (Y^2-X^3-AX-B)
+\]
+
+\subsection{Сложность алгоритма}
+
+Для фиксированного $\ell\in\{2 .. p\}$ (повт. для каждого $\ell$, всего различных $\bigO(\log q)$):
+\begin{itemize}
+    \item Подсчёт $x^{q^2}, x^q ... \operatorname{ mod } \psi_\ell(x)$\\
+    $\bigO(\log q \cdot (\ell^2 \log q)^2) = $ возведение в сетепень $\times$ количество бит в многочлене
+    
+    \item Умножение точки $(x^q, y^q) a' \leq \ell$ раз для каждого кандидата $a:$\\
+    $\bigO(\ell\cdot(\ell^2 \log q)^2)$
+\end{itemize}
+Всего: $\bigO(\log q \cdot(\bigO(\log q (\ell^2 \log q)^2) + \bigO(\ell(\ell^2 \log q)^2))) = \{\ell=\log q\} = \bigO(\log^8 q)$
+
+\end{document}
