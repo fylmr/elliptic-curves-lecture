@@ -266,9 +266,21 @@ $\softO(\sqrt{\log M} \cdot \operatorname{poly} \log q) = \softO(\sqrt{\log M}) 
 
 3. Повторить шаги (1), (2), получив множество порядков $\{k_{p_i} = \operatorname{ord} p_i\}_{i\leq t}$
 
-\quad $L = \operatorname{lcm}(k_{p_i})$,
+for i = 1..N:
 
-пока $L \in \left[q+1-2\sqrt{q}, q+1+2\sqrt{q} \right]$\\
+$\quad L = lcm(L, ord(P_i))$
+
+\quad if $L \geq q+1-2\sqrt{q}$:\quad\quad \textit{(т.е. $L \in \left[q+1-2\sqrt{q}, q+1+2\sqrt{q} \right]$)}
+
+\quad \quad return $L$
+
+\quad if $L \geq 4\sqrt{q}$:
+
+\quad \quad $M = q+1+[2\sqrt{q}] // L$
+
+\quad \quad return $M\cdot L$
+
+return $'fail'$
 
 Всевозможные порядки, которые могут быть получены на шаге 3:
 \[
