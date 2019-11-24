@@ -124,38 +124,38 @@
     % $(\frac{\cdot}{\F_q^{d_i}})$
 \lecture{№6 — 25.10.19}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
 
-\section{Алгоритм подсчёт точек элл. кривой над $\F_q$}
+\section{Алгоритм подсчёт $\F_q$-рациональных точек эллиптической кривой}
 
 Из предыдущей лекции:\\
 $ E(\F_q): y^2 = x^3 + Ax + B $ — эллиптическая кривая.
 
 $\#E(\F_q) = \abs{E(\F_q)}$ — число $q$-рациональных точек кривой (или порядок кривой).
 
-Теорема Хассе даёт верхнюю и нижнюю границу оценки для $\abs{E(\F_q)}$:
+Теорема Хассе даёт верхнюю и нижнюю границы оценки для $\abs{E(\F_q)}$:
 \[
     \abs{q+1-\#E(\F_q)} \leq 2 \sqrt{q}
 \]
 
-Асимптотика: $\#E(\F_q) = \bigO(q)$
-
-Если $a = q + 1 - \#E(\F_q)$, то $\abs{a} \leq 2\sqrt{q}$, $a$ — след Фробениуса.
+Асимптотика: $\#E(\F_q) = \bigO(q)$.
+%Если $a = q + 1 - \#E(\F_q)$, то $\abs{a} \leq 2\sqrt{q}$, $a$ — след Фробениуса.
 
 Мы доказали, что $\#E(\F_q) = q + 1 + \sum_{x \in \F_q}\left(\dfrac{x^3 + Ax+ B}{\F_q}\right)$, где $\left(\dfrac{\cdot}{\F_q}\right)$ — кв. вычет в $\F_q$ (если $q$ — простое $\Rightarrow$ символ Лежандра) \\
-Время нахождения результата в таком случае: $\bigO(q \log q) = \softO(q)$ — экспоненциальное от числа бит $q$.
+Время вычисления квадратичного вычета в таком случае: $\bigO(q \log q) = \softO(q)$ — экспоненциальное от числа бит $q$.
 
-\subsection{Алгоритм подсчёта точек Baby Step — Giant Step \\ = Алгоритм нахождения порядка точки $P\in E(\F_q)$ \\ (т.е.min $k: k\cdot P = \bigO$)}
+\subsection{Алгоритм подсчёта точек Baby Step — Giant Step \\ = Алгоритм нахождения порядка точки $P\in E(\F_q)$} 
 
 \underline{Идея}: Пусть $N = \#E(\F_q)$ — неизвестно.
 
-По теореме Лагранжа: $N\cdot P = \bigO \;\; \forall P$
+По теореме Лагранжа: $N\cdot P = \infty \;\; \forall P$
 
-Т.к. $q+1+2\sqrt{q} \leq N \leq q+1+2\sqrt{q}$ (т.е. $N$ лежит в интервале р-ра $4\sqrt{q}$,
-мы можем проверить все $N$ из этого интервала: $N\cdot P =^? \bigO$).
+Так как $q+1-2\sqrt{q} \leq N \leq q+1+2\sqrt{q}$ (т.е.\ $N$ лежит в интервале р-ра $4\sqrt{q}$,
+мы можем проверить все $N$ из этого интервала: $N\cdot P \stackrel{?}{=}
+ \infty$).
 
 Наивный метод (брутфорс): $\bigO(\sqrt{q})$\\
-Алгоритм BS—GS (стандратный алгоритм нахождения коллизий / цикла функции) ускоряет до $\bigO(q^{\frac{1}{4}})$
+Алгоритм BS-GS -- стандартный алгоритм нахождения коллизий / цикла функции-- ускоряет до $\bigO(q^{\frac{1}{4}})$
 
-Для начала опишем алгоритм нахождения порядка точки $P\in E$
+Для начала опишем алгоритм нахождения порядка точки $P\in E$.
 
 \subsubsection{Алгоритм BS—GS для нахождения порядока точки $P$}
 
@@ -164,16 +164,16 @@ $\#E(\F_q) = \abs{E(\F_q)}$ — число $q$-рациональных точе
 
 1. $Q = (q+1)P$
 
-2. (BS) Выберем $m \in \Z$: $m > q^\frac{1}{4}$\\
-Вычислим и сохраним (в список $L$) все $\pm j \cdot P, j = 0..m$ сортируем $L$.
+2. (BS) Выберем минимальное $m \in \Z$: $m > q^\frac{1}{4}$\\
+Вычислим и сохраним (в список $L$) все $\pm j \cdot P, j \in \{ 0, \ldots,  m\}$. Сортируем $L$.
 
-3. (GS) Вычисляем точки $Q + k(2mP)$ для всех $k = -m ... m$, пока не найдём в списке $L$ точку $\pm  jP$, что 
+3. (GS) Вычисляем точки $Q + k(2mP)$ для всех $k \in  \{-m \ldots m\}$, пока не найдём в списке $L$ точку $\pm  jP$, что 
 \[
-    Q + k(2mP) = \pm  jP
+    Q + k(2mP) = \pm  jP.
 \]
-$Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \bigO$
+$Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \infty$.
 
-4. $M = q+1+2mK \mp  j$ (порядок $P$ — делитель $M$)
+4. Положим $M = q+1+2mK \mp  j$ (порядок $P$ — делитель $M$)
 
 5. Факторизуем $M = p_1^{e_1}..p_r^{e_r}$
 
@@ -187,9 +187,13 @@ $Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \bigO$
 
 \quad Вернуться к Шагу 5 (неоптимально, но корректно). 
 
-Если $\frac{M}{p_i}p_i \neq \bigO \; \forall i$:
+Если $\frac{M}{p_i}p_i \neq \infty \; \forall i$:
 
 \quad Вернуть $M$.
+ 
+Иначе
+
+\quad Вернуть `fail'.
 
 \subsubsection{Корректность}
 
@@ -200,11 +204,11 @@ $Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \bigO$
 \begin{proof}
     Пусть
     \begin{align*}
-        x_0 &= x \operatorname{mod} 2m \text{, где} \operatorname{mod} B \in (-\dfrac{B}{2}, \dfrac{B}{2}] \\
+        x_0 &= x \bmod 2m \text{, где} \bmod B \in \left(-\dfrac{B}{2}, \dfrac{B}{2} \right] \\
         x_1 &= \frac{x-x_0}{2m}
     \end{align*}
     
-    Тогда $\abs{x_1} \leq \dfrac{2m^2 + m}{2m} < m+1$
+    Тогда $\abs{x_1} \leq \dfrac{2m^2 + m}{2m} < m+1$.
 \end{proof}
 
 2. Почему шаг 6 возвращает порядок $P$?
@@ -216,12 +220,12 @@ $Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \bigO$
     
     Пусть $p_i$ — простое делящее $\frac{M}{k}$.
     
-    Тогда $(p_i \cdot k)\ |\ M$, или $k\ |\ \left(\frac{M}{p_i}\right) \Rightarrow \left(\frac{M}{p_i}\right)g = 0$ (т.е. мы нашли $p_i: \left(\frac{M}{p_i}\right)g = 0$), что противоречит утверждению теоремы $\Rightarrow k = M$.\\
+    Тогда $(p_i \cdot k)\ |\ M$, или $k\ |\ \left(\frac{M}{p_i}\right) \Rightarrow \left(\frac{M}{p_i}\right)g = 0$ (т.е.\ мы нашли $p_i: \left(\frac{M}{p_i}\right)g = 0$), что противоречит утверждению теоремы $\Rightarrow k = M$.\\
 \end{proof}
 
 \subsubsection{Анализ сложности алгоритма}
 
-\underline{Шаг 1} (Быстрое вложение)
+\underline{Шаг 1} (Быстрое сложение)
 
 $\bigO(\log q)$ операций <<+>> на кривой, каждый <<+>>: $\operatorname{poly lg} q \Rightarrow \bigO(\operatorname{poly lg} q)$
 
@@ -262,9 +266,21 @@ $\softO(\sqrt{\log M} \cdot \operatorname{poly} \log q) = \softO(\sqrt{\log M}) 
 
 3. Повторить шаги (1), (2), получив множество порядков $\{k_{p_i} = \operatorname{ord} p_i\}_{i\leq t}$
 
-\quad $L = \operatorname{lcm}(k_{p_i})$,
+for i = 1..N:
 
-пока $L \in \left[q+1-2\sqrt{q}, q+1+2\sqrt{q} \right]$\\
+$\quad L = lcm(L, ord(P_i))$
+
+\quad if $L \geq q+1-2\sqrt{q}$:\quad\quad \textit{(т.е. $L \in \left[q+1-2\sqrt{q}, q+1+2\sqrt{q} \right]$)}
+
+\quad \quad return $L$
+
+\quad if $L \geq 4\sqrt{q}$:
+
+\quad \quad $M = q+1+[2\sqrt{q}] // L$
+
+\quad \quad return $M\cdot L$
+
+return $'fail'$
 
 Всевозможные порядки, которые могут быть получены на шаге 3:
 \[
@@ -277,12 +293,12 @@ $\softO(\sqrt{\log M} \cdot \operatorname{poly} \log q) = \softO(\sqrt{\log M}) 
 
 $E: y^2 = x^3 + Ax + B$
 
-Полиномиальный алгоритм от $\log q!, q$ — простое. 
+Первый полиномиальный алгоритм от $\log q$(!), $q$ — простое. 
 Основная идея: вычислить $\#E(\F_q) \operatorname{mod} \{2, 3 ... p\}$ — простые числа и затем восстановить $\#E(\F_q)$ по CRT.
 
 \textbf{1.} Вычисление $\#E(\F_q) \operatorname{mod} 2: \#E(\F_q)$ — чётно \\
-$\Leftrightarrow E(\F_q)$ содержит точку $\neq \bigO$ порядка 2. \\
-Точки порядка 2 имеют $y$-координату $= 0 \Leftrightarrow x^3 + Ax+B = \bigO$ в $\F_q$
+$\Leftrightarrow E(\F_q)$ содержит точку $\neq \infty$ порядка 2. \\
+Точки порядка 2 имеют $y$-координату $= 0 \Leftrightarrow x^3 + Ax+B = 0$ в $\F_q$
 
 Как определить, есть ли у $x^3 + Ax+ B$ корни в $\F_q$?\\
 Все элементы $\F_q$ — корни $x^q-x$. Т.е. $x^3+Ax+B=0$ в $\F_q \Leftrightarrow \gcd(x^q - x, x^3+Ax+B) \neq 1$ в $\F_p[x]$
@@ -294,7 +310,7 @@ $\exists$ эффективный алгоритм (вычисление $x^q$ п
 
 \textbf{2.} Обобщим на другие $\ell \in \{2..p\}, \ell \neq 2$
 
-Т.к. $|\#E(\F_q) - q - 1| < 2\sqrt{q}$, для получения $\#E(\F_q)$ достаточно рассмотреть простые $\ell$, что 
+Так как. $|\#E(\F_q) - q - 1| < 2\sqrt{q}$, для получения $\#E(\F_q)$ достаточно рассмотреть простые $\ell$, что 
 \[
     \prod_\ell \ell > 4\sqrt{q}
 \]
@@ -302,9 +318,9 @@ $\exists$ эффективный алгоритм (вычисление $x^q$ п
 
 \textbf{2.1.} Как и в случае $\ell = 2$, рассмотрим группу точек $\ell$-кручения 
 \[
-    E[\ell] = \{ P \in E(\overbar{\F_q}): \ell\cdot P = \bigO \} \simeq \Z/\ell\Z \times \Z/\ell\Z 
+    E[\ell] = \{ P \in E(\overbar{\F_q}): \ell\cdot P = \bigO \} \simeq \Z/\ell\Z \times \Z/\ell\Z,
 \]
-$\psi_q(x) \in \F_q[x] - \ell$ — многочлены деления ($\in \F_q[x]$ т.к. мы берём простые (нечётные) $\ell$). Они могут быть эффективно получены в явном виде с помощью рекуррентных соотношений.
+где $\psi_q(x) \in \F_q[x] - \ell$ — многочлены деления ($\in \F_q[x]$ т.к. мы берём простые (нечётные) $\ell$). Они могут быть эффективно получены в явном виде с помощью рекуррентных соотношений.
 
 \textbf{2.2.} Эндоморфизм Фробениуса $\phi_q: E \rightarrow E, (x,y)\mapsto (x^q, y^q)$ удовлетворяет соотношению (см. Лекцию №5)
 \begin{equation}
@@ -312,26 +328,26 @@ $\psi_q(x) \in \F_q[x] - \ell$ — многочлены деления ($\in \F_
     \phi_q^2 - a\phi + q = 0, \text{ где } a \text{ — след Фробениуса } (a = q+1-\#E(\F_q))
 \end{equation}
 \[
-    \text{(т.е. } (x^{q^2}, y^{q^2}) - [a](x^q, y^q) + [q] = \bigO)
+    \text{(т.е. } (x^{q^2}, y^{q^2}) - [a](x^q, y^q) + [q] = \infty)
 \]
 
-Соотношение (\ref{eq_1}) справедливо и $\operatorname{mod} \ell$, т.е.\\
-$\phi_q^2 - a'\phi + q' = 0$ для некоторых $a' \in \{0 .. \ell-1\}$,\\
-что $a \equiv a' \operatorname{mod} \ell, q' \in \{0 .. \ell-1\}, q=q' \operatorname{mod} \ell$
+Соотношение (\ref{eq_1}) справедливо и $\bmod \ell$, т.е.\\
+$\phi_q^2 - a'\phi + q' = 0$ для некоторых $a' \in \{0 \bmod  \ell-1\}$,\\
+что $a \equiv a' \bmod \ell, q' \in \{0 \ldots \ell-1\}, q=q' \bmod \ell$
 
 Важно: соотношение (\ref{eq_1}) может быть задано с помощью многочленов $\Rightarrow$ для кандидатов $a'\ \exists$ эффективная проверка:
 \[
     q'\cdot P = \left(\frac{\phi_{q'}(x)}{\psi^2_{q'}(x)}, \frac{\omega_{q'}(x,y)}{\psi^3_n(x,y)} \right)
 \]
 \[
-    (x^{q^2}, y^{q^2}) + q'(X,Y) \equiv a'(x^q, y^q) \operatorname{mod} \psi_\ell(x) \text{ и } \operatorname{mod} (Y^2-X^3-AX-B)
+    (x^{q^2}, y^{q^2}) + q'(X,Y) \equiv a'(x^q, y^q) \operatorname{mod} \psi_\ell(x) \text{ и } \bmod  (Y^2-X^3-AX-B)
 \]
 
 \subsection{Сложность алгоритма}
 
-Для фиксированного $\ell\in\{2 .. p\}$ (повт. для каждого $\ell$, всего различных $\bigO(\log q)$):
+Для фиксированного $\ell\in\{2 \ldots p\}$ (повт. для каждого $\ell$, всего различных $\bigO(\log q)$):
 \begin{itemize}
-    \item Подсчёт $x^{q^2}, x^q ... \operatorname{ mod } \psi_\ell(x)$\\
+    \item Подсчёт $x^{q^2}, x^q, ... \bmod \psi_\ell(x)$\\
     $\bigO(\log q \cdot (\ell^2 \log q)^2) = $ возведение в степень $\times$ количество бит в многочлене
     
     \item Умножение точки $(x^q, y^q) a' \leq \ell$ раз для каждого кандидата $a:$\\
