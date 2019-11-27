@@ -62,6 +62,7 @@
 \newcommand{\eps}{\varepsilon}
 \newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\newcommand{\lcm}{\operatorname{lcm}}
 
 %proper overline reduced by some mu's, re-adjust if needed
 \newcommand{\overbar}[1]{\overline{\mkern-0.0mu#1\mkern-4.0mu}}
@@ -179,13 +180,12 @@ $Q + k(2mP) = \pm jP \iff (q+1 + 2mk \mp  j)P = \infty$.
 
 6. Для $i = 1..r$:
 
-Вычислим $\left(\frac{M}{p_i} \right)$
 
-Если $\left(\frac{M}{p_i} \right)P=\bigO$:
+\hspace{20pt} Если $\frac{M}{p_i} P=\infty$:
 
-\quad $M \leftarrow \frac{M}{p_i}$
+\hspace{40pt} $M \leftarrow \frac{M}{p_i}$
 
-\quad Вернуться к Шагу 5 (неоптимально, но корректно). 
+\hspace{40pt}  Вернуться к Шагу 5 (неоптимально, но корректно). 
 
 Если $\frac{M}{p_i}p_i \neq \infty \; \forall i$:
 
@@ -260,15 +260,30 @@ $\softO(\sqrt{\log M} \cdot \operatorname{poly} \log q) = \softO(\sqrt{\log M}) 
 \end{enumerate}
 
 \subsection{Алгоритм вычисления $\#(\F_q)$}
-1. Выбрать $P \in E(\F_q)$ (случайно выбираем $x$-координату, посчитать $y: y^2 = x^3 + Ax+B$)
+Выбрать $N$ -- максимальное число случайных точек $P \in E(\F_q)$
+
+Положить $L = 1$
+Для $i = 1 \ldots N$:
+\quad 1. Выбрать $P \in E(\F_q)$ (случайно выбираем $x$-координату, посчитать $y: y^2 = x^3 + Ax+B$)
 
 2. Найти $k_p = \operatorname{ord}P$
 
-3. Повторить шаги (1), (2), получив множество порядков $\{k_{p_i} = \operatorname{ord} p_i\}_{i\leq t}$
+3. $L = \operatorname\lcm(L, k_p)$
 
-\quad $L = \operatorname{lcm}(k_{p_i})$,
+4. Если $L >= 4 \sqrt{q} \text{ and } L < q+ 1 - 2\sqrt{q}$:
 
-пока $L \in \left[q+1-2\sqrt{q}, q+1+2\sqrt{q} \right]$\\
+	\quad Вычислить $m = (q+1+ \lceil 2\sqrt{q}\rfloor // L$
+	
+	\quad Вернуть $L\cdot m $
+	
+	Иначе
+	
+		\quad Вернуть $L$
+		
+	Вернуть `fail'
+		
+
+
 
 Всевозможные порядки, которые могут быть получены на шаге 3:
 \[
